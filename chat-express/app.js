@@ -6,7 +6,11 @@ const public = require('./api/public.js')
 const port = 3000;
 const jwtAuth = require('./api/jwtAuth.js')
 
-var Server = app.listen(port);
+var Server = app.listen(port, function(err){
+    if(!err){
+        console.log('启动成功')
+    }
+});
 var io = require('socket.io');
 var ws = io.listen(Server)
 
@@ -35,12 +39,18 @@ app.use((err, req, res, next) => {
 
 
 ws.on('connection', function(socket){
-    console.log('用户已经连接');
     socket.on('disconnect', function(){
-      console.log('user disconnected');
+      console.log('a user disconnected');
     });
-    socket.on('receiveMsg', function(msg){
-      console.log('message: ' + msg);
-      socket.emit('sendMsg', msg);
-    }); 
+
+    socket.on('addRoom', function(data){
+        console.log(data, socket.id)
+    })
+    
+    socket.on('login', function(data){
+        console.log('用户已经登录')
+    });
+    
+
+ 
 });

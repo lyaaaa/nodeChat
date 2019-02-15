@@ -9,7 +9,6 @@ Vue.use(new VueSocketio({
   connection: 'http://localhost:3000'
 }))
 
-
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios;
 axios.defaults.baseURL = '/api'
