@@ -14,4 +14,6 @@ mongoose.connection.on("open", function(){
     console.log("数据库链接成功");
 });
 
+
+
 module.exports = mongoose;

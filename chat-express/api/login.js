@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
-require('../db/connect.js');
 const {
     userModel
 } = require('../db/model.js');

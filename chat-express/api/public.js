@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const formidable = require('formidable')
 const fs = require('fs');
-require('../db/connect.js');
+
 
 router.post('/upimg', function (req, res) {
     var form = new formidable.IncomingForm();
