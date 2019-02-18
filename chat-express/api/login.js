@@ -6,6 +6,8 @@ const {
     userModel
 } = require('../db/model.js');
 
+const { checkToken, timeStr } = require('../common/common.js');
+
 
 function getUser(name, pwd) {
     return new Promise((resolve, reject) => {
@@ -44,21 +46,6 @@ function getUser(name, pwd) {
         })
     })
 }
-
-function checkToken(token) {
-    return new Promise((resolve, reject) => {
-        jwt.verify(token, 'secret', (err, decoded) => {
-            if(err){
-                reject({
-                    errMsg: 'token失效'
-                })
-            }else{
-                resolve(decoded)
-            }
-        })
-    })
-}
-
   
 // 登录
 router.post('/login', async function (req, res) {
@@ -79,8 +66,7 @@ router.post('/register', function (req, res) {
             res.json(err)
         }
         if (data.length == 0) {
-            let nowDate = new Date()
-            let birthday = `${nowDate.getFullYear()}-${nowDate.getMonth() + 1}-${nowDate.getDate()}`
+            let birthday = timeStr('YY-M-D')
             var newUser = new userModel({
                 name: req.body.name,
                 pwd: req.body.pwd,
@@ -110,29 +96,20 @@ router.post('/register', function (req, res) {
 
 
 // 获取用户信息
-router.post('/myInfo', function(req, res){
+router.post('/myInfo',async function(req, res){
     let token = req.headers.authorization.split('Bearer ')[1]
-    jwt.verify(token, 'secret', (err, decoded) => {
-        if(err){
-            res.json({
-                code: -1,
-                data: {
-                    errMsg: 'token失效'
-                }
-            })
-        }else{
-            userModel.findOne({
-                name: decoded.name
-            }, (err, data) => {
-                if(!err){
-                    res.json({
-                        code: 0,
-                        data: data
-                    })
-                }
-            })
-        }
-    })
+    try {
+      let userData = await checkToken(token)
+      res.json({
+        code: 0,
+        data: userData
+      })
+    } catch(err){
+        res.json({
+            code: -1,
+            data: data
+        })
+    }
 })
 
 // 编辑用户头像

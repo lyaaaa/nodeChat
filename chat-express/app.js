@@ -7,13 +7,15 @@ const login = require('./api/login.js');
 const public = require('./api/public.js');
 const chat = require('./api/chat.js');
 
+
 const port = 3000;
 const jwtAuth = require('./api/jwtAuth.js')
-require('./db/connect.js');
 
+require('./db/connect.js');
 const {
     chatRoomModel
 } = require('./db/model.js');
+const { saveChatMsg, joinChatRoom } = require('./db/dbchat.js');
 
 var Server = app.listen(port, function (err) {
     if (!err) {
@@ -71,6 +73,17 @@ ws.on('connection', function (socket) {
                 console.log(err)
             }
         })
+    })
+
+    // 加入聊天室
+    socket.on('joinRoom', function (data) {
+        socket.join(data.roomId);
+        joinChatRoom(socket, data)
+    })
+
+    // 发送消息
+    socket.on('sendMsg', function(data){
+        saveChatMsg(socket, data)
     })
 
     socket.on('login', function (data) {
