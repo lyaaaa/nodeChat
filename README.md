@@ -1,5 +1,5 @@
 # nodeChat
-express+vue+mongodb
+express + vue + vuex + mongodb
 
 当前实现功能: 
 

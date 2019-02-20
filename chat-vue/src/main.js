@@ -5,6 +5,8 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import VueSocketio from 'vue-socket.io';
+import store from './store'
+
 Vue.use(new VueSocketio({
   connection: 'http://localhost:3000'
 }))
@@ -30,6 +32,7 @@ axios.interceptors.request.use(
 new Vue({
   el: '#app',
   router,
+  store,
   components: {
     App
   },
