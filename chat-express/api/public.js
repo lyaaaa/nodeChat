@@ -42,10 +42,6 @@ function upFileQiniu(qnToken, key, filePath){
     });
 }
 
-
-
-
-
 router.post('/upimg', function (req, res) {
     var form = new formidable.IncomingForm();
     form.parse(req, function(err, fields, files) {
